@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen UMKM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: 700;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .table th {
+            font-weight: 600;
+        }
+        
+        .section-title {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-shop"></i> Toko incer
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="tab-barang">Barang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="tab-penjualan">Penjualan</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Section Manajemen Barang -->
+        <div id="section-barang">
+            <h3 class="section-title">Manajemen Data Barang</h3>
+            
+            <!-- Form Input Barang -->
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary" id="form-barang-title">Tambah Barang Baru</h6>
+                </div>
+                <div class="card-body">
+                    <form id="form-barang">
+                        <input type="hidden" id="barang-id">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="nama-barang" class="form-label">Nama Barang</label>
+                                <input type="text" class="form-control" id="nama-barang" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="harga-barang" class="form-label">Harga (Rp)</label>
+                                <input type="number" class="form-control" id="harga-barang" min="0" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="stok-barang" class="form-label">Stok</label>
+                                <input type="number" class="form-control" id="stok-barang" min="0" required>
+                            </div>
+                            <div class="col-md-2 mb-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100" id="btn-simpan-barang">
+                                    <i class="bi bi-save"></i> Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Daftar Barang -->
+            <div class="card">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Barang</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="tabel-barang">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Barang</th>
+                                    <th>Harga</th>
+                                    <th>Stok</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daftar-barang">
+                                <!-- Data barang akan dimuat di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Manajemen Penjualan -->
+        <div id="section-penjualan" style="display: none;">
+            <h3 class="section-title">Manajemen Data Penjualan</h3>
+            
+            <!-- Form Input Penjualan -->
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary" id="form-penjualan-title">Tambah Transaksi Penjualan</h6>
+                </div>
+                <div class="card-body">
+                    <form id="form-penjualan">
+                        <input type="hidden" id="penjualan-id">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="barang-terjual" class="form-label">Barang</label>
+                                <select class="form-select" id="barang-terjual" required>
+                                    <option value="">Pilih Barang</option>
+                                    <!-- Opsi barang akan diisi melalui JavaScript -->
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="jumlah-terjual" class="form-label">Jumlah</label>
+                                <input type="number" class="form-control" id="jumlah-terjual" min="1" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="total-harga" class="form-label">Total Harga (Rp)</label>
+                                <input type="number" class="form-control" id="total-harga" readonly>
+                            </div>
+                            <div class="col-md-3 mb-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100" id="btn-simpan-penjualan">
+                                    <i class="bi bi-save"></i> Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Daftar Penjualan -->
+            <div class="card">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Transaksi Penjualan</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="tabel-penjualan">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Nama Barang</th>
+                                    <th>Jumlah</th>
+                                    <th>Total Harga</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daftar-penjualan">
+                                <!-- Data penjualan akan dimuat di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hapus -->
+    <div class="modal fade" id="modalHapus" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Hapus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus data ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-hapus">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Firebase dan Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        // Import fungsi Firebase
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
+        import {
+            getFirestore,
+            collection,
+            doc,
+            getDocs,
+            getDoc,
+            addDoc,
+            deleteDoc,
+            updateDoc,
+            query,
+            orderBy,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js';
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmI0zRauvzaL4oEuXinkmXhGiwTsYxYQc",
+            authDomain: "insan-cemerlang-ee7af.firebaseapp.com",
+            projectId: "insan-cemerlang-ee7af",
+            storageBucket: "insan-cemerlang-ee7af.appspot.com",
+            messagingSenderId: "1047091827759",
+            appId: "1:1047091827759:web:0f1742d6f3922f856de2da",
+            measurementId: "G-GL8J5GC8XB"
+        };
+
+        // Inisialisasi Firebase
+        const aplikasi = initializeApp(firebaseConfig);
+        const basisdata = getFirestore(aplikasi);
+
+        // Fungsi untuk manajemen barang
+        export async function tambahBarang(nama, harga, stok) {
+            try {
+                const refDokumen = await addDoc(collection(basisdata, "barang"), {
+                    nama: nama,
+                    harga: parseInt(harga),
+                    stok: parseInt(stok),
+                    createdAt: serverTimestamp()
+                });
+                console.log("Berhasil menyimpan data barang");
+                return true;
+            } catch (error) {
+                console.error("Gagal menyimpan data barang:", error);
+                return false;
+            }
+        }
+
+        export async function ambilDaftarBarang() {
+            const refDokumen = collection(basisdata, "barang");
+            const kueri = query(refDokumen, orderBy("nama"));
+            const cuplikanKueri = await getDocs(kueri);
+
+            let hasilKueri = [];
+            cuplikanKueri.forEach((dokumen) => {
+                hasilKueri.push({
+                    id: dokumen.id,
+                    nama: dokumen.data().nama,
+                    harga: dokumen.data().harga,
+                    stok: dokumen.data().stok
+                });
+            });
+
+            return hasilKueri;
+        }
+
+        export async function hapusBarang(id) {
+            try {
+                await deleteDoc(doc(basisdata, "barang", id));
+                console.log("Berhasil menghapus data barang");
+                return true;
+            } catch (error) {
+                console.error("Gagal menghapus data barang:", error);
+                return false;
+            }
+        }
+
+        export async function ubahBarang(id, namaBaru, hargaBaru, stokBaru) {
+            try {
+                await updateDoc(
+                    doc(basisdata, "barang", id),
+                    { 
+                        nama: namaBaru, 
+                        harga: parseInt(hargaBaru), 
+                        stok: parseInt(stokBaru),
+                        updatedAt: serverTimestamp()
+                    }
+                );
+                console.log("Berhasil mengubah data barang");
+                return true;
+            } catch (error) {
+                console.error("Gagal mengubah data barang:", error);
+                return false;
+            }
+        }
+
+        export async function ambilBarang(id) {
+            const refDokumen = doc(basisdata, "barang", id);
+            const snapshotDokumen = await getDoc(refDokumen);
+            
+            if (snapshotDokumen.exists()) {
+                return {
+                    id: snapshotDokumen.id,
+                    ...snapshotDokumen.data()
+                };
+            } else {
+                return null;
+            }
+        }
+
+        // Fungsi untuk manajemen penjualan
+        export async function tambahPenjualan(barangId, jumlah, totalHarga) {
+            try {
+                // Dapatkan data barang untuk menyimpan nama barang di data penjualan
+                const barang = await ambilBarang(barangId);
+                
+                const refDokumen = await addDoc(collection(basisdata, "penjualan"), {
+                    barangId: barangId,
+                    namaBarang: barang.nama,
+                    jumlah: parseInt(jumlah),
+                    totalHarga: parseInt(totalHarga),
+                    createdAt: serverTimestamp()
+                });
+                
+                // Kurangi stok barang
+                const stokBaru = barang.stok - parseInt(jumlah);
+                await updateDoc(
+                    doc(basisdata, "barang", barangId),
+                    { stok: stokBaru }
+                );
+                
+                console.log("Berhasil menyimpan data penjualan");
+                return true;
+            } catch (error) {
+                console.error("Gagal menyimpan data penjualan:", error);
+                return false;
+            }
+        }
+
+        export async function ambilDaftarPenjualan() {
+            const refDokumen = collection(basisdata, "penjualan");
+            const kueri = query(refDokumen, orderBy("createdAt", "desc"));
+            const cuplikanKueri = await getDocs(kueri);
+
+            let hasilKueri = [];
+            cuplikanKueri.forEach((dokumen) => {
+                const data = dokumen.data();
+                hasilKueri.push({
+                    id: dokumen.id,
+                    namaBarang: data.namaBarang,
+                    jumlah: data.jumlah,
+                    totalHarga: data.totalHarga,
+                    tanggal: data.createdAt ? data.createdAt.toDate().toLocaleDateString('id-ID') : 'Tanggal tidak tersedia'
+                });
+            });
+
+            return hasilKueri;
+        }
+
+        export async function hapusPenjualan(id) {
+            try {
+                // Untuk menghapus penjualan, kita perlu mengembalikan stok barang
+                const penjualan = await ambilPenjualan(id);
+                const barang = await ambilBarang(penjualan.barangId);
+                
+                // Kembalikan stok barang
+                const stokBaru = barang.stok + penjualan.jumlah;
+                await updateDoc(
+                    doc(basisdata, "barang", penjualan.barangId),
+                    { stok: stokBaru }
+                );
+                
+                // Hapus data penjualan
+                await deleteDoc(doc(basisdata, "penjualan", id));
+                
+                console.log("Berhasil menghapus data penjualan");
+                return true;
+            } catch (error) {
+                console.error("Gagal menghapus data penjualan:", error);
+                return false;
+            }
+        }
+
+        export async function ubahPenjualan(id, barangId, jumlah, totalHarga) {
+            try {
+                const penjualan = await ambilPenjualan(id);
+                const barangLama = await ambilBarang(penjualan.barangId);
+                const barangBaru = await ambilBarang(barangId);
+                
+                // Kembalikan stok barang lama
+                const stokBarangLama = barangLama.stok + penjualan.jumlah;
+                await updateDoc(
+                    doc(basisdata, "barang", penjualan.barangId),
+                    { stok: stokBarangLama }
+                );
+                
+                // Kurangi stok barang baru
+                const stokBarangBaru = barangBaru.stok - parseInt(jumlah);
+                await updateDoc(
+                    doc(basisdata, "barang", barangId),
+                    { stok: stokBarangBaru }
+                );
+                
+                // Update data penjualan
+                await updateDoc(
+                    doc(basisdata, "penjualan", id),
+                    { 
+                        barangId: barangId,
+                        namaBarang: barangBaru.nama,
+                        jumlah: parseInt(jumlah),
+                        totalHarga: parseInt(totalHarga),
+                        updatedAt: serverTimestamp()
+                    }
+                );
+                
+                console.log("Berhasil mengubah data penjualan");
+                return true;
+            } catch (error) {
+                console.error("Gagal mengubah data penjualan:", error);
+                return false;
+            }
+        }
+
+        export async function ambilPenjualan(id) {
+            const refDokumen = doc(basisdata, "penjualan", id);
+            const snapshotDokumen = await getDoc(refDokumen);
+            
+            if (snapshotDokumen.exists()) {
+                return {
+                    id: snapshotDokumen.id,
+                    ...snapshotDokumen.data()
+                };
+            } else {
+                return null;
+            }
+        }
+
+        // Inisialisasi aplikasi setelah fungsi didefinisikan
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variabel global
+            let barangUntukDihapus = null;
+            let penjualanUntukDihapus = null;
+            let modeEditBarang = false;
+            let modeEditPenjualan = false;
+            
+        // Elemen UI
+            const sectionBarang = document.getElementById('section-barang');
+            const sectionPenjualan = document.getElementById('section-penjualan');
+            const tabBarang = document.getElementById('tab-barang');
+            const tabPenjualan = document.getElementById('tab-penjualan');
+            const formBarang = document.getElementById('form-barang');
+            const formPenjualan = document.getElementById('form-penjualan');
+            const daftarBarangElement = document.getElementById('daftar-barang');
+            const daftarPenjualanElement = document.getElementById('daftar-penjualan');
+            const selectBarang = document.getElementById('barang-terjual');
+            const jumlahTerjual = document.getElementById('jumlah-terjual');
+            const totalHarga = document.getElementById('total-harga');
+            const formBarangTitle = document.getElementById('form-barang-title');
+            const formPenjualanTitle = document.getElementById('form-penjualan-title');
+            const btnSimpanBarang = document.getElementById('btn-simpan-barang');
+            const btnSimpanPenjualan = document.getElementById('btn-simpan-penjualan');
+            const btnConfirmHapus = document.getElementById('btn-confirm-hapus');
+            const modalHapus = new bootstrap.Modal(document.getElementById('modalHapus'));
+            
+            
+          // Fungsi untuk memuat daftar barang
+            async function muatDaftarBarang() {
+                try {
+                    const daftarBarang = await ambilDaftarBarang();
+                    daftarBarangElement.innerHTML = '';
+                    
+                    if (daftarBarang.length === 0) {
+                        daftarBarangElement.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data barang</td></tr>';
+                        
+            return;
+           }
+                    
+  daftarBarang.forEach((barang, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${barang.nama}</td>
+      <td>${formatRupiah(barang.harga)}</td>
+      <td>${barang.stok}</td>
+      
+      <td>
+  <button class="btn btn-sm btn-warning edit-barang" data-id="${barang.id}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger hapus-barang" data-id="${barang.id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        `;
+      
+      daftarBarangElement.appendChild(row);
+                    });
+                    
+                    // Tambahkan event listener untuk tombol edit dan hapus
+                    document.querySelectorAll('.edit-barang').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            editBarang(id);
+                        });
+                    });
+        document.querySelectorAll('.hapus-barang').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            tampilkanModalHapus('barang', id);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Gagal memuat daftar barang:', error);
+                    daftarBarangElement.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Gagal memuat data barang</td></tr>';
+                }
+            }
+    // Fungsi untuk memuat daftar penjualan
+            async function muatDaftarPenjualan() {
+                try {
+                    const daftarPenjualan = await ambilDaftarPenjualan();
+                    daftarPenjualanElement.innerHTML = '';
+                    
+                    if (daftarPenjualan.length === 0) {
+                        daftarPenjualanElement.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data penjualan</td></tr>';
+                        
+                        return;
+                    }
+                    
+                    daftarPenjualan.forEach((penjualan, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${penjualan.tanggal}</td>
+                            <td>${penjualan.namaBarang}</td>
+                            <td>${penjualan.jumlah}</td>
+                            <td>${formatRupiah(penjualan.totalHarga)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger hapus-penjualan" data-id="${penjualan.id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                        
+                        daftarPenjualanElement.appendChild(row);
+                    });
+            
+// Tambahkan event listener untuk tombol hapus
+    document.querySelectorAll('.hapus-penjualan').forEach(btn => {
+      btn.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+    
+    tampilkanModalHapus('penjualan', id);
+         });
+    });
+     } catch (error) {
+        console.error('Gagal memuat daftar penjualan:', error);
+           daftarPenjualanElement.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat data penjualan</td></tr>';
+                }
+            }
+     // Fungsi untuk memuat opsi barang di form penjualan
+            async function muatOpsiBarang() {
+                try {
+                    const daftarBarang = await ambilDaftarBarang();
+                    selectBarang.innerHTML = '<option value="">Pilih Barang</option>';
+                    
+      daftarBarang.forEach(barang => {
+       if (barang.stok > 0) {
+        const option = document.createElement('option');
+             option.value = barang.id;
+             option.textContent = `${barang.nama} (Stok: ${barang.stok})`;
+             option.setAttribute('data-harga', barang.harga);
+             selectBarang.appendChild(option);
+                        }
+                    });
+    } catch (error) {
+       console.error('Gagal memuat opsi barang:', error);
+                }
+            }
+
+       // Fungsi untuk mengedit barang
+            async function editBarang(id) {
+                try {
+                    const barang = await ambilBarang(id);
+                    if (!barang) {
+                        alert('Barang tidak ditemukan');
+                        return;
+                    }
+                    
+                    document.getElementById('barang-id').value = barang.id;
+                    document.getElementById('nama-barang').value = barang.nama;
+                    document.getElementById('harga-barang').value = barang.harga;
+                    document.getElementById('stok-barang').value = barang.stok;
+                    
+                    modeEditBarang = true;
+                    formBarangTitle.textContent = 'Edit Barang';
+                    btnSimpanBarang.innerHTML = '<i class="bi bi-pencil"></i> Update';
+                    
+                    // Scroll ke form
+                    formBarang.scrollIntoView({ behavior: 'smooth' });
+                } catch (error) {
+                    console.error('Gagal memuat data barang:', error);
+                    alert('Gagal memuat data barang');
+                }
+            }
+
+            // Fungsi untuk menampilkan modal hapus
+            function tampilkanModalHapus(jenis, id) {
+                if (jenis === 'barang') {
+                    barangUntukDihapus = id;
+                } else {
+                    penjualanUntukDihapus = id;
+                }
+                
+                modalHapus.show();
+            }
+
+            // Fungsi untuk mereset form barang
+            function resetFormBarang() {
+                formBarang.reset();
+                document.getElementById('barang-id').value = '';
+                modeEditBarang = false;
+                formBarangTitle.textContent = 'Tambah Barang Baru';
+                btnSimpanBarang.innerHTML = '<i class="bi bi-save"></i> Simpan';
+            }
+
+            // Fungsi untuk mereset form penjualan
+            function resetFormPenjualan() {
+                formPenjualan.reset();
+                document.getElementById('penjualan-id').value = '';
+                modeEditPenjualan = false;
+                formPenjualanTitle.textContent = 'Tambah Transaksi Penjualan';
+                btnSimpanPenjualan.innerHTML = '<i class="bi bi-save"></i> Simpan';
+                totalHarga.value = '';
+            }
+
+            // Fungsi untuk memformat angka menjadi format Rupiah
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                }).format(angka);
+            }
+
+            // Event listener untuk tab
+            tabBarang.addEventListener('click', function() {
+                sectionBarang.style.display = 'block';
+                sectionPenjualan.style.display = 'none';
+                tabBarang.classList.add('active');
+                tabPenjualan.classList.remove('active');
+            });
+
+            tabPenjualan.addEventListener('click', function() {
+                sectionBarang.style.display = 'none';
+                sectionPenjualan.style.display = 'block';
+                tabBarang.classList.remove('active');
+                tabPenjualan.classList.add('active');
+                muatOpsiBarang();
+                muatDaftarPenjualan();
+            });
+
+            // Event listener untuk form barang
+            formBarang.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const nama = document.getElementById('nama-barang').value;
+                const harga = document.getElementById('harga-barang').value;
+                const stok = document.getElementById('stok-barang').value;
+                const id = document.getElementById('barang-id').value;
+                
+                if (!nama || !harga || !stok) {
+                    alert('Semua field harus diisi');
+                    return;
+                }
+                
+                let berhasil = false;
+                
+                if (modeEditBarang) {
+                    berhasil = await ubahBarang(id, nama, harga, stok);
+                } else {
+                    berhasil = await tambahBarang(nama, harga, stok);
+                }
+                
+                if (berhasil) {
+                    resetFormBarang();
+                    muatDaftarBarang();
+                    alert(modeEditBarang ? 'Barang berhasil diupdate' : 'Barang berhasil ditambahkan');
+                } else {
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                }
+            });
+
+            // Event listener untuk form penjualan
+            formPenjualan.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const barangId = selectBarang.value;
+                const jumlah = jumlahTerjual.value;
+                const total = totalHarga.value;
+                
+                if (!barangId || !jumlah || !total) {
+                    alert('Semua field harus diisi');
+                    return;
+                }
+                
+                const berhasil = await tambahPenjualan(barangId, jumlah, total);
+                
+                if (berhasil) {
+                    resetFormPenjualan();
+                    muatDaftarPenjualan();
+                    muatOpsiBarang();
+                    muatDaftarBarang(); // Perbarui stok di tabel barang
+                    alert('Transaksi penjualan berhasil disimpan');
+                } else {
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                }
+            });
+
+            // Event listener untuk select barang (menghitung total harga)
+            selectBarang.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const harga = selectedOption.getAttribute('data-harga') || 0;
+                const jumlah = jumlahTerjual.value || 0;
+                
+                totalHarga.value = harga * jumlah;
+            });
+
+            // Event listener untuk input jumlah (menghitung total harga)
+            jumlahTerjual.addEventListener('input', function() {
+                const selectedOption = selectBarang.options[selectBarang.selectedIndex];
+                const harga = selectedOption ? selectedOption.getAttribute('data-harga') || 0 : 0;
+                const jumlah = this.value || 0;
+                
+                totalHarga.value = harga * jumlah;
+            });
+
+            // Event listener untuk tombol hapus di modal
+            btnConfirmHapus.addEventListener('click', async function() {
+                if (barangUntukDihapus) {
+                    const berhasil = await hapusBarang(barangUntukDihapus);
+                    if (berhasil) {
+                        muatDaftarBarang();
+                        alert('Barang berhasil dihapus');
+                    } else {
+                        alert('Gagal menghapus barang');
+                    }
+                    barangUntukDihapus = null;
+                } else if (penjualanUntukDihapus) {
+                    const berhasil = await hapusPenjualan(penjualanUntukDihapus);
+                    if (berhasil) {
+                        muatDaftarPenjualan();
+                        muatOpsiBarang();
+                        muatDaftarBarang(); // Perbarui stok di tabel barang
+                        alert('Transaksi penjualan berhasil dihapus');
+                    } else {
+                        alert('Gagal menghapus transaksi penjualan');
+                    }
+                    penjualanUntukDihapus = null;
+                }
+                
+                modalHapus.hide();
+            });
+
+            // Inisialisasi aplikasi
+            muatDaftarBarang();
+            muatOpsiBarang();
+        });
+    </script>
+</body>
+</html>

@@ -1,597 +1,909 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistem Stok Barang UMKM</title>
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    :root {
-      --primary-color: #4e73df;
-      --secondary-color: #858796;
-      --success-color: #1cc88a;
-      --danger-color: #e74a3b;
-      --warning-color: #f6c23e;
-    }
-    
-    body {
-      background-color: #f8f9fc;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .navbar-custom {
-      background-color: var(--primary-color);
-    }
-    
-    .card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-      margin-bottom: 1.5rem;
-    }
-    
-    .card-header {
-      background-color: #f8f9fc;
-      border-bottom: 1px solid #e3e6f0;
-      padding: 1rem 1.35rem;
-      font-weight: 700;
-    }
-    
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-    
-    .btn-primary:hover {
-      background-color: #3a5fc8;
-      border-color: #3a5fc8;
-    }
-    
-    .low-stock {
-      color: var(--danger-color);
-      font-weight: bold;
-    }
-    
-    .medium-stock {
-      color: var(--warning-color);
-      font-weight: bold;
-    }
-    
-    .action-buttons {
-      white-space: nowrap;
-    }
-    
-    .search-container {
-      max-width: 300px;
-    }
-    
-    .stat-card {
-      border-left: 4px solid;
-    }
-    
-    .stat-card.primary {
-      border-left-color: var(--primary-color);
-    }
-    
-    .stat-card.success {
-      border-left-color: var(--success-color);
-    }
-    
-    .stat-card.warning {
-      border-left-color: var(--warning-color);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> UMKM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+        }
+        
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.9);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #2c5530 !important;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card-header {
+            background-color: #2c5530;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background-color: #2c5530;
+            border-color: #2c5530;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e3a23;
+            border-color: #1e3a23;
+        }
+        
+        .btn-warning {
+            background-color: #e6a400;
+            border-color: #e6a400;
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+        }
+        
+        .stok-baik {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .stok-menipis {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .stok-habis {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card h3 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .summary-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .form-control:focus {
+            border-color: #2c5530;
+            box-shadow: 0 0 0 0.2rem rgba(44, 85, 48, 0.25);
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #2c5530;
+            color: white;
+            border-color: #2c5530;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #2c5530;
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <i class="fas fa-store me-2"></i>Sistem Stok UMKM
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#"Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">Tambah Barang</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container">
-    <!-- Statistik -->
-    <div class="row mb-4">
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card primary h-100">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col">
-                <div class="text-xs fw-bold text-primary text-uppercase mb-1">Total Barang</div>
-                <div class="h5 mb-0 fw-bold text-gray-800" id="totalBarang">0</div>
-              </div>
-              <div class="col-auto">
-                <i class="fas fa-boxes fa-2x text-gray-300"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card success h-100">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col">
-                <div class="text-xs fw-bold text-success text-uppercase mb-1">Stok Baik</div>
-                <div class="h5 mb-0 fw-bold text-gray-800" id="stokBaik">0</div>
-              </div>
-              <div class="col-auto">
-                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card warning h-100">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col">
-                <div class="text-xs fw-bold text-warning text-uppercase mb-1">Stok Menipis</div>
-                <div class="h5 mb-0 fw-bold text-gray-800" id="stokMenipis">0</div>
-              </div>
-              <div class="col-auto">
-                <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card danger h-100">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col">
-                <div class="text-xs fw-bold text-danger text-uppercase mb-1">Stok Habis</div>
-                <div class="h5 mb-0 fw-bold text-gray-800" id="stokHabis">0</div>
-              </div>
-              <div class="col-auto">
-                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Daftar Barang -->
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 fw-bold">Daftar Stok Barang</h6>
-            <div class="search-container">
-              <div class="input-group">
-                <input type="text" id="searchInput" class="form-control" placeholder="Cari barang...">
-                <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                  <i class="fas fa-search"></i>
+    <div class="overlay">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-store"></i> Toko Sembako Wida
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-              </div>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#barang">Data Barang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#penjualan">Data Penjualan</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nama Barang</th>
-                    <th scope="col">Kategori</th>
-                    <th scope="col">Stok</th>
-                    <th scope="col">Harga (Rp)</th>
-                    <th scope="col">Deskripsi</th>
-                    <th scope="col">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="daftarBarang">
-                  <!-- Data akan diisi oleh JavaScript -->
-                </tbody>
-              </table>
+        </nav>
+
+        <div class="container mt-4">
+            <!-- Ringkasan -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-boxes"></i>
+                        <h3 id="total-barang">0</h3>
+                        <p>Total Barang</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-check-circle"></i>
+                        <h3 id="stok-baik">0</h3>
+                        <p>Stok Baik</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3 id="stok-menipis">0</h3>
+                        <p>Stok Menipis</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-times-circle"></i>
+                        <h3 id="stok-habis">0</h3>
+                        <p>Stok Habis</p>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- Tab Navigasi -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="barang-tab" data-bs-toggle="tab" data-bs-target="#barang" type="button" role="tab">
+                        <i class="fas fa-box"></i> Data Barang
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="penjualan-tab" data-bs-toggle="tab" data-bs-target="#penjualan" type="button" role="tab">
+                        <i class="fas fa-shopping-cart"></i> Data Penjualan
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Konten Tab -->
+            <div class="tab-content" id="myTabContent">
+                <!-- Tab Data Barang -->
+                <div class="tab-pane fade show active" id="barang" role="tabpanel">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Daftar Barang</h5>
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
+                                <i class="fas fa-plus"></i> Tambah Barang Baru
+                            </button>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Barang</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
+                                            <th>Status Stok</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabel-barang">
+                                        <!-- Data barang akan dimuat di sini -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Data Penjualan -->
+                <div class="tab-pane fade" id="penjualan" role="tabpanel">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-list"></i> Daftar Penjualan</h5>
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahPenjualan">
+                                <i class="fas fa-plus"></i> Tambah Penjualan Baru
+                            </button>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tanggal</th>
+                                            <th>Nama Barang</th>
+                                            <th>Jumlah</th>
+                                            <th>Total Harga</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabel-penjualan">
+                                        <!-- Data penjualan akan dimuat di sini -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Modal Tambah Barang -->
-  <div class="modal fade" id="tambahBarangModal" tabindex="-1" aria-labelledby="tambahBarangModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="tambahBarangModalLabel">Tambah Barang Baru</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formTambahBarang">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="namaBarang" class="form-label">Nama Barang *</label>
-                <input type="text" class="form-control" id="namaBarang" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="kategoriBarang" class="form-label">Kategori *</label>
-                <select class="form-select" id="kategoriBarang" required>
-                  <option value="" selected disabled>Pilih kategori</option>
-                  <option value="Makanan">Makanan</option>
-                  <option value="Minuman">Minuman</option>
-                  <option value="Pakaian">Pakaian</option>
-                  <option value="Elektronik">Elektronik</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
-              </div>
+    <!-- Modal Tambah Barang -->
+    <div class="modal fade" id="modalTambahBarang" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Barang Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahBarang">
+                        <div class="mb-3">
+                            <label for="namaBarang" class="form-label">Nama Barang</label>
+                            <input type="text" class="form-control" id="namaBarang" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hargaBarang" class="form-label">Harga (Rp)</label>
+                            <input type="number" class="form-control" id="hargaBarang" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stokBarang" class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="stokBarang" min="0" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btnSimpanBarang">Simpan</button>
+                </div>
             </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label for="stokBarang" class="form-label">Stok *</label>
-                <input type="number" class="form-control" id="stokBarang" min="0" required>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="minimalStok" class="form-label">Stok Minimal *</label>
-                <input type="number" class="form-control" id="minimalStok" min="1" value="5" required>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="hargaBarang" class="form-label">Harga (Rp) *</label>
-                <input type="number" class="form-control" id="hargaBarang" min="0" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="deskripsiBarang" class="form-label">Deskripsi</label>
-              <textarea class="form-control" id="deskripsiBarang" rows="3"></textarea>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-primary" id="simpanBarang">Simpan</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Modal Edit Barang -->
-  <div class="modal fade" id="editBarangModal" tabindex="-1" aria-labelledby="editBarangModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editBarangModalLabel">Edit Barang</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formEditBarang">
-            <input type="hidden" id="editId">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="editNamaBarang" class="form-label">Nama Barang *</label>
-                <input type="text" class="form-control" id="editNamaBarang" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="editKategoriBarang" class="form-label">Kategori *</label>
-                <select class="form-select" id="editKategoriBarang" required>
-                  <option value="Makanan">Makanan</option>
-                  <option value="Minuman">Minuman</option>
-                  <option value="Pakaian">Pakaian</option>
-                  <option value="Elektronik">Elektronik</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
-              </div>
+    <!-- Modal Edit Barang -->
+    <div class="modal fade" id="modalEditBarang" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Barang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditBarang">
+                        <input type="hidden" id="editIdBarang">
+                        <div class="mb-3">
+                            <label for="editNamaBarang" class="form-label">Nama Barang</label>
+                            <input type="text" class="form-control" id="editNamaBarang" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editHargaBarang" class="form-label">Harga (Rp)</label>
+                            <input type="number" class="form-control" id="editHargaBarang" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStokBarang" class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="editStokBarang" min="0" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdateBarang">Update</button>
+                </div>
             </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label for="editStokBarang" class="form-label">Stok *</label>
-                <input type="number" class="form-control" id="editStokBarang" min="0" required>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="editMinimalStok" class="form-label">Stok Minimal *</label>
-                <input type="number" class="form-control" id="editMinimalStok" min="1" required>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label for="editHargaBarang" class="form-label">Harga (Rp) *</label>
-                <input type="number" class="form-control" id="editHargaBarang" min="0" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="editDeskripsiBarang" class="form-label">Deskripsi</label>
-              <textarea class="form-control" id="editDeskripsiBarang" rows="3"></textarea>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-primary" id="updateBarang">Perbarui</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Bootstrap & jQuery JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Modal Tambah Penjualan -->
+    <div class="modal fade" id="modalTambahPenjualan" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Penjualan Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahPenjualan">
+                        <div class="mb-3">
+                            <label for="barangDijual" class="form-label">Barang</label>
+                            <select class="form-control" id="barangDijual" required>
+                                <option value="">Pilih Barang</option>
+                                <!-- Opsi barang akan diisi oleh JavaScript -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jumlahDijual" class="form-label">Jumlah</label>
+                            <input type="number" class="form-control" id="jumlahDijual" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalHarga" class="form-label">Total Harga (Rp)</label>
+                            <input type="number" class="form-control" id="totalHarga" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btnSimpanPenjualan">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <!-- Firebase App (wajib) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <!-- Firebase Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Modal Edit Penjualan -->
+    <div class="modal fade" id="modalEditPenjualan" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Penjualan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditPenjualan">
+                        <input type="hidden" id="editIdPenjualan">
+                        <div class="mb-3">
+                            <label for="editBarangDijual" class="form-label">Barang</label>
+                            <select class="form-control" id="editBarangDijual" required>
+                                <option value="">Pilih Barang</option>
+                                <!-- Opsi barang akan diisi oleh JavaScript -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editJumlahDijual" class="form-label">Jumlah</label>
+                            <input type="number" class="form-control" id="editJumlahDijual" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editTotalHarga" class="form-label">Total Harga (Rp)</label>
+                            <input type="number" class="form-control" id="editTotalHarga" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdatePenjualan">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    // Konfigurasi Firebase - GANTI DENGAN KONFIGURASI ANDA
-    const firebaseConfig = {
-      apiKey: "AIzaSyDmI0zRauvzaL4oEuXinkmXhGiwTsYxYQc",
-  authDomain: "insan-cemerlang-ee7af.firebaseapp.com",
-  projectId: "insan-cemerlang-ee7af",
-  storageBucket: "insan-cemerlang-ee7af.firebasestorage.app",
-  messagingSenderId: "1047091827759",
-  appId: "1:1047091827759:web:0f1742d6f3922f856de2da",
-  measurementId: "G-GL8J5GC8XB"
-};
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
+        import {
+            getFirestore,
+            collection,
+            doc,
+            getDocs,
+            getDoc,
+            addDoc,
+            deleteDoc,
+            updateDoc,
+            query,
+            orderBy,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js';
 
-    // Inisialisasi Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // Fungsi untuk mendapatkan daftar barang
-    function ambilDaftarBarang() {
-      return db.collection("barang").get().then((querySnapshot) => {
-        const barang = [];
-        querySnapshot.forEach((doc) => {
-          barang.push({ id: doc.id, ...doc.data() });
-        });
-        return barang;
-      });
-    }
-
-    // Fungsi untuk menambah barang
-    function tambahBarang(barang) {
-      return db.collection("barang").add(barang);
-    }
-
-    // Fungsi untuk mengubah barang
-    function ubahBarang(id, barang) {
-      return db.collection("barang").doc(id).update(barang);
-    }
-
-    // Fungsi untuk menghapus barang
-    function hapusBarang(id) {
-      return db.collection("barang").doc(id).delete();
-    }
-
-    // Fungsi untuk menampilkan daftar barang
-    function tampilkanDaftarBarang() {
-      ambilDaftarBarang().then(daftarBarang => {
-        const elemenDaftarBarang = $("#daftarBarang");
-        elemenDaftarBarang.empty();
-        
-        // Hitung statistik
-        let totalBarang = daftarBarang.length;
-        let stokBaik = 0;
-        let stokMenipis = 0;
-        let stokHabis = 0;
-        
-        let nomor = 1;
-        daftarBarang.forEach((data) => {
-          // Tentukan kelas stok berdasarkan jumlah
-          let stokClass = "";
-          let stokText = data.stok;
-          
-          if (data.stok === 0) {
-            stokClass = "low-stock";
-            stokText = "HABIS";
-            stokHabis++;
-          } else if (data.stok < data.minimalStok) {
-            stokClass = "medium-stock";
-            stokText = data.stok + " (Menipis)";
-            stokMenipis++;
-          } else {
-            stokBaik++;
-          }
-          
-          elemenDaftarBarang.append(
-            "<tr>" +
-            "<td>" + nomor + "</td>" +
-            "<td>" + data.nama + "</td>" +
-            "<td>" + data.kategori + "</td>" +
-            "<td class='" + stokClass + "'>" + stokText + "</td>" +
-            "<td>" + new Intl.NumberFormat('id-ID').format(data.harga) + "</td>" +
-            "<td>" + (data.deskripsi || "-") + "</td>" +
-            "<td class='action-buttons'>" + 
-            "<button class='btn btn-sm btn-warning me-1 btn-ubah' data-id='" + data.id + "'><i class='fas fa-edit'></i></button>" +
-            "<button class='btn btn-sm btn-danger btn-hapus' data-id='" + data.id + "'><i class='fas fa-trash'></i></button>" +
-            "</td>" +
-            "</tr>"
-          );
-          nomor++;
-        });
-        
-        // Update statistik
-        $("#totalBarang").text(totalBarang);
-        $("#stokBaik").text(stokBaik);
-        $("#stokMenipis").text(stokMenipis);
-        $("#stokHabis").text(stokHabis);
-        
-        // Tambahkan event listener untuk tombol ubah
-        $(".btn-ubah").click(function() {
-          const id = $(this).data('id');
-          bukaModalEdit(id);
-        });
-        
-        // Tambahkan event listener untuk tombol hapus
-        $(".btn-hapus").click(function() {
-          const id = $(this).data('id');
-          hapusDataBarang(id);
-        });
-      }).catch(error => {
-        console.error("Error mengambil data: ", error);
-        alert("Terjadi kesalahan saat mengambil data barang.");
-      });
-    }
-
-    // Fungsi untuk membuka modal edit
-    function bukaModalEdit(id) {
-      db.collection("barang").doc(id).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          $("#editId").val(id);
-          $("#editNamaBarang").val(data.nama);
-          $("#editKategoriBarang").val(data.kategori);
-          $("#editStokBarang").val(data.stok);
-          $("#editMinimalStok").val(data.minimalStok);
-          $("#editHargaBarang").val(data.harga);
-          $("#editDeskripsiBarang").val(data.deskripsi || "");
-          
-          // Tampilkan modal edit
-          const modal = new bootstrap.Modal(document.getElementById('editBarangModal'));
-          modal.show();
-        } else {
-          alert("Data barang tidak ditemukan!");
-        }
-      }).catch((error) => {
-        console.error("Error mengambil data barang: ", error);
-        alert("Terjadi kesalahan saat mengambil data barang.");
-      });
-    }
-
-    // Fungsi untuk menghapus data barang
-    function hapusDataBarang(id) {
-      if (confirm("Apakah Anda yakin ingin menghapus barang ini?")) {
-        hapusBarang(id).then(() => {
-          alert("Barang berhasil dihapus!");
-          tampilkanDaftarBarang();
-        }).catch((error) => {
-          console.error("Error menghapus barang: ", error);
-          alert("Terjadi kesalahan saat menghapus barang.");
-        });
-      }
-    }
-
-    // Event listener ketika dokumen siap
-    $(document).ready(function() {
-      // Tampilkan daftar barang saat halaman dimuat
-      tampilkanDaftarBarang();
-      
-      // Event listener untuk tombol simpan barang
-      $("#simpanBarang").click(function() {
-        const nama = $("#namaBarang").val();
-        const kategori = $("#kategoriBarang").val();
-        const stok = parseInt($("#stokBarang").val());
-        const minimalStok = parseInt($("#minimalStok").val());
-        const harga = parseInt($("#hargaBarang").val());
-        const deskripsi = $("#deskripsiBarang").val();
-        
-        if (!nama || !kategori || isNaN(stok) || isNaN(minimalStok) || isNaN(harga)) {
-          alert("Harap isi semua field yang wajib diisi!");
-          return;
-        }
-        
-        const barang = {
-          nama: nama,
-          kategori: kategori,
-          stok: stok,
-          minimalStok: minimalStok,
-          harga: harga,
-          deskripsi: deskripsi,
-          tanggalDitambah: new Date()
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmI0zRauvzaL4oEuXinkmXhGiwTsYxYQc",
+            authDomain: "insan-cemerlang-ee7af.firebaseapp.com",
+            projectId: "insan-cemerlang-ee7af",
+            storageBucket: "insan-cemerlang-ee7af.appspot.com",
+            messagingSenderId: "1047091827759",
+            appId: "1:1047091827759:web:0f1742d6f3922f856de2da",
+            measurementId: "G-GL8J5GC8XB"
         };
-        
-        tambahBarang(barang).then(() => {
-          alert("Barang berhasil ditambahkan!");
-          $("#tambahBarangModal").modal("hide");
-          $("#formTambahBarang")[0].reset();
-          tampilkanDaftarBarang();
-        }).catch((error) => {
-          console.error("Error menambahkan barang: ", error);
-          alert("Terjadi kesalahan saat menambahkan barang.");
-        });
-      });
-      
-      // Event listener untuk tombol update barang
-      $("#updateBarang").click(function() {
-        const id = $("#editId").val();
-        const nama = $("#editNamaBarang").val();
-        const kategori = $("#editKategoriBarang").val();
-        const stok = parseInt($("#editStokBarang").val());
-        const minimalStok = parseInt($("#editMinimalStok").val());
-        const harga = parseInt($("#editHargaBarang").val());
-        const deskripsi = $("#editDeskripsiBarang").val();
-        
-        if (!nama || !kategori || isNaN(stok) || isNaN(minimalStok) || isNaN(harga)) {
-          alert("Harap isi semua field yang wajib diisi!");
-          return;
+
+        // Inisialisasi Firebase
+        const aplikasi = initializeApp(firebaseConfig);
+        const basisdata = getFirestore(aplikasi);
+
+        // Fungsi untuk manajemen data barang
+        export async function tambahBarang(nama, harga, stok) {
+            try {
+                const refDokumen = await addDoc(collection(basisdata, "barang"), {
+                    nama: nama,
+                    harga: parseInt(harga),
+                    stok: parseInt(stok)
+                });
+                console.log("Berhasil menyimpan data barang");
+                return true;
+            } catch (error) {
+                console.log("Gagal menyimpan data barang", error);
+                return false;
+            }
+        }
+
+        export async function ambilDaftarBarang() {
+            const refDokumen = collection(basisdata, "barang");
+            const kueri = query(refDokumen, orderBy("nama"));
+            const cuplikanKueri = await getDocs(kueri);
+
+            let hasilKueri = [];
+            cuplikanKueri.forEach((dokumen) => {
+                hasilKueri.push({
+                    id: dokumen.id,
+                    nama: dokumen.data().nama,
+                    harga: dokumen.data().harga,
+                    stok: dokumen.data().stok
+                });
+            });
+
+            return hasilKueri;
+        }
+
+        export async function hapusBarang(id) {
+            try {
+                await deleteDoc(doc(basisdata, "barang", id));
+                console.log("Berhasil menghapus data barang");
+                return true;
+            } catch (error) {
+                console.log("Gagal menghapus data barang", error);
+                return false;
+            }
         }
         
-        const barang = {
-          nama: nama,
-          kategori: kategori,
-          stok: stok,
-          minimalStok: minimalStok,
-          harga: harga,
-          deskripsi: deskripsi
+        export async function ubahBarang(id, namaBaru, hargaBaru, stokBaru) {
+            try {
+                await updateDoc(
+                    doc(basisdata, "barang", id),
+                    { 
+                        nama: namaBaru, 
+                        harga: parseInt(hargaBaru), 
+                        stok: parseInt(stokBaru)
+                    }
+                );
+                console.log("Berhasil mengubah data barang");
+                return true;
+            } catch (error) {
+                console.log("Gagal mengubah data barang", error);
+                return false;
+            }
+        }
+
+        export async function ambilBarang(id) {
+            const refDokumen = doc(basisdata, "barang", id);
+            const snapshotDokumen = await getDoc(refDokumen);
+            
+            if (snapshotDokumen.exists()) {
+                return snapshotDokumen.data();
+            } else {
+                return null;
+            }
+        }
+
+        // Fungsi untuk manajemen data penjualan
+        export async function tambahPenjualan(idBarang, jumlah, totalHarga) {
+            try {
+                // Dapatkan data barang untuk mendapatkan nama
+                const barang = await ambilBarang(idBarang);
+                
+                const refDokumen = await addDoc(collection(basisdata, "penjualan"), {
+                    idBarang: idBarang,
+                    namaBarang: barang.nama,
+                    jumlah: parseInt(jumlah),
+                    totalHarga: parseInt(totalHarga),
+                    tanggal: serverTimestamp()
+                });
+                
+                // Kurangi stok barang
+                const stokBaru = barang.stok - parseInt(jumlah);
+                await updateDoc(doc(basisdata, "barang", idBarang), { stok: stokBaru });
+                
+                console.log("Berhasil menyimpan data penjualan");
+                return true;
+            } catch (error) {
+                console.log("Gagal menyimpan data penjualan", error);
+                return false;
+            }
+        }
+
+        export async function ambilDaftarPenjualan() {
+            const refDokumen = collection(basisdata, "penjualan");
+            const kueri = query(refDokumen, orderBy("tanggal", "desc"));
+            const cuplikanKueri = await getDocs(kueri);
+
+            let hasilKueri = [];
+            cuplikanKueri.forEach((dokumen) => {
+                const data = dokumen.data();
+                hasilKueri.push({
+                    id: dokumen.id,
+                    idBarang: data.idBarang,
+                    namaBarang: data.namaBarang,
+                    jumlah: data.jumlah,
+                    totalHarga: data.totalHarga,
+                    tanggal: data.tanggal ? data.tanggal.toDate().toLocaleDateString('id-ID') : 'Tanggal tidak tersedia'
+                });
+            });
+
+            return hasilKueri;
+        }
+
+        export async function hapusPenjualan(id) {
+            try {
+                await deleteDoc(doc(basisdata, "penjualan", id));
+                console.log("Berhasil menghapus data penjualan");
+                return true;
+            } catch (error) {
+                console.log("Gagal menghapus data penjualan", error);
+                return false;
+            }
+        }
+
+        export async function ubahPenjualan(id, idBarang, jumlah, totalHarga) {
+            try {
+                // Dapatkan data penjualan lama untuk mengembalikan stok
+                const penjualanLama = await ambilPenjualan(id);
+                const barangLama = await ambilBarang(penjualanLama.idBarang);
+                
+                // Kembalikan stok barang lama
+                const stokBarangLama = barangLama.stok + penjualanLama.jumlah;
+                await updateDoc(doc(basisdata, "barang", penjualanLama.idBarang), { stok: stokBarangLama });
+                
+                // Dapatkan data barang baru untuk mendapatkan nama
+                const barangBaru = await ambilBarang(idBarang);
+                
+                // Update data penjualan
+                await updateDoc(
+                    doc(basisdata, "penjualan", id),
+                    { 
+                        idBarang: idBarang,
+                        namaBarang: barangBaru.nama,
+                        jumlah: parseInt(jumlah),
+                        totalHarga: parseInt(totalHarga)
+                    }
+                );
+                
+                // Kurangi stok barang baru
+                const stokBarangBaru = barangBaru.stok - parseInt(jumlah);
+                await updateDoc(doc(basisdata, "barang", idBarang), { stok: stokBarangBaru });
+                
+                console.log("Berhasil mengubah data penjualan");
+                return true;
+            } catch (error) {
+                console.log("Gagal mengubah data penjualan", error);
+                return false;
+            }
+        }
+
+        export async function ambilPenjualan(id) {
+            const refDokumen = doc(basisdata, "penjualan", id);
+            const snapshotDokumen = await getDoc(refDokumen);
+            
+            if (snapshotDokumen.exists()) {
+                return snapshotDokumen.data();
+            } else {
+                return null;
+            }
+        }
+
+        // Fungsi untuk mengelola tampilan UI
+        async function muatDataBarang() {
+            const daftarBarang = await ambilDaftarBarang();
+            const tabelBarang = document.getElementById('tabel-barang');
+            tabelBarang.innerHTML = '';
+            
+            let totalBarang = 0;
+            let stokBaik = 0;
+            let stokMenipis = 0;
+            let stokHabis = 0;
+            
+            daftarBarang.forEach((barang, index) => {
+                // Hitung status stok
+                totalBarang++;
+                if (barang.stok > 10) {
+                    stokBaik++;
+                } else if (barang.stok > 0) {
+                    stokMenipis++;
+                } else {
+                    stokHabis++;
+                }
+                
+                // Tentukan kelas status stok
+                let statusKelas = '';
+                if (barang.stok > 10) {
+                    statusKelas = 'stok-baik';
+                } else if (barang.stok > 0) {
+                    statusKelas = 'stok-menipis';
+                } else {
+                    statusKelas = 'stok-habis';
+                }
+                
+                // Tampilkan status stok
+                let statusTeks = '';
+                if (barang.stok > 10) {
+                    statusTeks = 'Baik';
+                } else if (barang.stok > 0) {
+                    statusTeks = 'Menipis';
+                } else {
+                    statusTeks = 'Habis';
+                }
+                
+                const baris = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${barang.nama}</td>
+                        <td>Rp ${barang.harga.toLocaleString('id-ID')}</td>
+                        <td>${barang.stok}</td>
+                        <td class="${statusKelas}">${statusTeks}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="bukaModalEditBarang('${barang.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="hapusDataBarang('${barang.id}')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tabelBarang.innerHTML += baris;
+            });
+            
+            // Update ringkasan
+            document.getElementById('total-barang').textContent = totalBarang;
+            document.getElementById('stok-baik').textContent = stokBaik;
+            document.getElementById('stok-menipis').textContent = stokMenipis;
+            document.getElementById('stok-habis').textContent = stokHabis;
+            
+            // Isi dropdown barang untuk form penjualan
+            isiDropdownBarang();
+        }
+
+        async function muatDataPenjualan() {
+            const daftarPenjualan = await ambilDaftarPenjualan();
+            const tabelPenjualan = document.getElementById('tabel-penjualan');
+            tabelPenjualan.innerHTML = '';
+            
+            daftarPenjualan.forEach((penjualan, index) => {
+                const baris = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${penjualan.tanggal}</td>
+                        <td>${penjualan.namaBarang}</td>
+                        <td>${penjualan.jumlah}</td>
+                        <td>Rp ${penjualan.totalHarga.toLocaleString('id-ID')}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="bukaModalEditPenjualan('${penjualan.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="hapusDataPenjualan('${penjualan.id}')">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tabelPenjualan.innerHTML += baris;
+            });
+        }
+
+        async function isiDropdownBarang() {
+            const daftarBarang = await ambilDaftarBarang();
+            const dropdownBarang = document.getElementById('barangDijual');
+            const dropdownEditBarang = document.getElementById('editBarangDijual');
+            
+            // Kosongkan dropdown terlebih dahulu
+            dropdownBarang.innerHTML = '<option value="">Pilih Barang</option>';
+            dropdownEditBarang.innerHTML = '<option value="">Pilih Barang</option>';
+            
+            daftarBarang.forEach(barang => {
+                if (barang.stok > 0) {
+                    const option = `<option value="${barang.id}" data-harga="${barang.harga}">${barang.nama} (Stok: ${barang.stok})</option>`;
+                    dropdownBarang.innerHTML += option;
+                    dropdownEditBarang.innerHTML += option;
+                }
+            });
+        }
+
+        // Event listeners
+        document.getElementById('btnSimpanBarang').addEventListener('click', async function() {
+            const nama = document.getElementById('namaBarang').value;
+            const harga = document.getElementById('hargaBarang').value;
+            const stok = document.getElementById('stokBarang').value;
+            
+            if (!nama || !harga || !stok) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+            
+            const berhasil = await tambahBarang(nama, harga, stok);
+            if (berhasil) {
+                document.getElementById('formTambahBarang').reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalTambahBarang'));
+                modal.hide();
+                muatDataBarang();
+            } else {
+                alert('Gagal menambahkan barang!');
+            }
+        });
+
+        document.getElementById('btnUpdateBarang').addEventListener('click', async function() {
+            const id = document.getElementById('editIdBarang').value;
+            const nama = document.getElementById('editNamaBarang').value;
+            const harga = document.getElementById('editHargaBarang').value;
+            const stok = document.getElementById('editStokBarang').value;
+            
+            if (!nama || !harga || !stok) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+            
+            const berhasil = await ubahBarang(id, nama, harga, stok);
+            if (berhasil) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditBarang'));
+                modal.hide();
+                muatDataBarang();
+            } else {
+                alert('Gagal mengupdate barang!');
+            }
+        });
+
+        document.getElementById('btnSimpanPenjualan').addEventListener('click', async function() {
+            const idBarang = document.getElementById('barangDijual').value;
+            const jumlah = document.getElementById('jumlahDijual').value;
+            const totalHarga = document.getElementById('totalHarga').value;
+            
+            if (!idBarang || !jumlah || !totalHarga) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+            
+            const berhasil = await tambahPenjualan(idBarang, jumlah, totalHarga);
+            if (berhasil) {
+                document.getElementById('formTambahPenjualan').reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalTambahPenjualan'));
+                modal.hide();
+                muatDataBarang();
+                muatDataPenjualan();
+            } else {
+                alert('Gagal menambahkan penjualan!');
+            }
+        });
+
+        document.getElementById('btnUpdatePenjualan').addEventListener('click', async function() {
+            const id = document.getElementById('editIdPenjualan').value;
+            const idBarang = document.getElementById('editBarangDijual').value;
+            const jumlah = document.getElementById('editJumlahDijual').value;
+            const totalHarga = document.getElementById('editTotalHarga').value;
+            
+            if (!idBarang || !jumlah || !totalHarga) {
+                alert('Semua field harus diisi!');
+                return;
+            }
+            
+            const berhasil = await ubahPenjualan(id, idBarang, jumlah, totalHarga);
+            if (berhasil) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditPenjualan'));
+                modal.hide();
+                muatDataBarang();
+                muatDataPenjualan();
+            } else {
+                alert('Gagal mengupdate penjualan!');
+            }
+        });
+
+        // Fungsi untuk menghitung total harga otomatis
+        document.getElementById('barangDijual').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const harga = selectedOption.getAttribute('data-harga');
+            const jumlah = document.getElementById('jumlahDijual').value;
+            
+            if (harga && jumlah) {
+                document.getElementById('totalHarga').value = parseInt(harga) * parseInt(jumlah);
+            }
+        });
+
+        document.getElementById('jumlahDijual').addEventListener('input', function() {
+            const selectedOption = document.getElementById('barangDijual').options[document.getElementById('barangDijual').selectedIndex];
+            const harga = selectedOption ? selectedOption.getAttribute('data-harga') : null;
+            const jumlah = this.value;
+            
+            if (harga && jumlah) {
+                document.getElementById('totalHarga').value = parseInt(harga) * parseInt(jumlah);
+            }
+        });
+
+        document.getElementById('editBarangDijual').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const harga = selectedOption.getAttribute('data-harga');
+            const jumlah = document.getElementById('editJumlahDijual').value;
+            
+            if (harga && jumlah) {
+                document.getElementById('editTotalHarga').value = parseInt(harga) * parseInt(jumlah);
+            }
+        });
+
+        document.getElementById('editJumlahDijual').addEventListener('input', function() {
+            const selectedOption = document.getElementById('editBarangDijual').options[document.getElementById('editBarangDijual').selectedIndex];
+            const harga = selectedOption ? selectedOption.getAttribute('data-harga') : null;
+            const jumlah = this.value;
+            
+            if (harga && jumlah) {
+                document.getElementById('editTotalHarga').value = parseInt(harga) * parseInt(jumlah);
+            }
+        });
+
+        // Fungsi global untuk dipanggil dari HTML
+        window.bukaModalEditBarang = async function(id) {
+            const barang = await ambilBarang(id);
+            if (barang) {
+                document.getElementById('editIdBarang').value = id;
+                document.getElementById('editNamaBarang').value = barang.nama;
+                document.getElementById('editHargaBarang').value = barang.harga;
+                document.getElementById('editStokBarang').value = barang.stok;
+                
+                const modal = new bootstrap.Modal(document.getElementById('modalEditBarang'));
+                modal.show();
+            }
         };
-        
-        ubahBarang(id, barang).then(() => {
-          alert("Barang berhasil diperbarui!");
-          $("#editBarangModal").modal("hide");
-          tampilkanDaftarBarang();
-        }).catch((error) => {
-          console.error("Error memperbarui barang: ", error);
-          alert("Terjadi kesalahan saat memperbarui barang.");
+
+        window.hapusDataBarang = async function(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
+                const berhasil = await hapusBarang(id);
+                if (berhasil) {
+                    muatDataBarang();
+                } else {
+                    alert('Gagal menghapus barang!');
+                }
+            }
+        };
+
+        window.bukaModalEditPenjualan = async function(id) {
+            const penjualan = await ambilPenjualan(id);
+            if (penjualan) {
+                document.getElementById('editIdPenjualan').value = id;
+                document.getElementById('editBarangDijual').value = penjualan.idBarang;
+                document.getElementById('editJumlahDijual').value = penjualan.jumlah;
+                document.getElementById('editTotalHarga').value = penjualan.totalHarga;
+                
+                const modal = new bootstrap.Modal(document.getElementById('modalEditPenjualan'));
+                modal.show();
+            }
+        };
+
+        window.hapusDataPenjualan = async function(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus penjualan ini?')) {
+                const berhasil = await hapusPenjualan(id);
+                if (berhasil) {
+                    muatDataPenjualan();
+                } else {
+                    alert('Gagal menghapus penjualan!');
+                }
+            }
+        };
+
+        // Muat data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            muatDataBarang();
+            muatDataPenjualan();
         });
-      });
-      
-      // Event listener untuk pencarian
-      $("#searchButton").click(function() {
-        const searchTerm = $("#searchInput").val().toLowerCase();
-        filterBarang(searchTerm);
-      });
-      
-      $("#searchInput").on("keyup", function() {
-        const searchTerm = $(this).val().toLowerCase();
-        filterBarang(searchTerm);
-      });
-    });
-    
-    // Fungsi untuk memfilter barang berdasarkan pencarian
-    function filterBarang(searchTerm) {
-      const rows = $("#daftarBarang tr");
-      
-      rows.each(function() {
-        const nama = $(this).find("td:eq(1)").text().toLowerCase();
-        const kategori = $(this).find("td:eq(2)").text().toLowerCase();
-        
-        if (nama.includes(searchTerm) || kategori.includes(searchTerm)) {
-          $(this).show();
-        } else {
-          $(this).hide();
-        }
-      });
-    }
-  </script>
+    </script>
 </body>
-
 </html>
